@@ -1,0 +1,3 @@
+[submodule "src/gcompat/obstack"]
+	path = src/gcompat/obstack
+	url = https://github.com/TheMadHau5/musl-obstack
