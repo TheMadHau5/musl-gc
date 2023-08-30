@@ -127,3 +127,17 @@ unsigned long long strtouq(const char *nptr, char **endptr, int base)
 {
 	return strtoull(nptr, endptr, base);
 }
+
+int rpmatch(const char* response)
+{
+	if (!response)
+		return -1;
+	if (response[0] == 'Y' || response[0] == 'y')
+		return 1;
+	if (response[0] == 'N' || response[0] == 'n')
+		return 0;
+
+	// TODO: actually check for yes/no based on locale
+
+	return -1;
+}

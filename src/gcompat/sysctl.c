@@ -3,12 +3,6 @@
 #include <unistd.h>		/* size_t */
 
 
-unsigned long __getauxval(unsigned long type)
-{
-	return getauxval(type);
-}
-
-
 #ifdef SYS__sysctl
 
 struct __sysctl_args {

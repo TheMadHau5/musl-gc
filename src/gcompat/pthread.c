@@ -34,27 +34,6 @@ int __register_atfork(void (*prepare)(void), void (*parent)(void),
 weak_alias(__register_atfork, register_atfork);
 
 /**
- * Get the name of a thread.
- */
-int pthread_getname_np(pthread_t thread, char *name, size_t len)
-{
-	int fd = open("/proc/thread-self/comm", O_RDONLY | O_CLOEXEC);
-	ssize_t n;
-
-	if (fd < 0)
-		return errno;
-	n = read(fd, name, len);
-	if (n < 0)
-		return errno;
-	/* If the trailing newline was not read, the buffer was too small. */
-	if (n == 0 || name[n - 1] != '\n')
-		return ERANGE;
-	name[n - 1] = '\0';
-
-	return 0;
-}
-
-/**
  * Yield this thread.
  */
 int pthread_yield(void)

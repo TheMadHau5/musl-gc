@@ -7,6 +7,7 @@
 #include <stdlib.h> /* calloc */
 #include <dlfcn.h>  /* dlsym */
 #include <string.h> /* strcmp */
+#include <sys/syscall.h> /* syscall */
 
 #include "alias.h" /* alias */
 
@@ -184,69 +185,12 @@ int group_member(gid_t gid)
 	return 0;
 }
 
-#ifndef LOADER
-#error LOADER must be defined
-#endif
-
-static int (*real_execve)(const char *pathname, char *const argv[], char *const envp[]);
-int execve(const char *pathname, char *const argv[], char *const envp[]) {
-	if(real_execve == NULL) {
-		real_execve = dlsym(RTLD_NEXT, "execve");
-		if(real_execve == NULL) {
-			errno = ENOSYS;
-			return -1;
-		}
-	}
-
-	if(!strcmp(pathname, "/proc/self/exe")) {
-		char **new_argv;
-		char target[PATH_MAX] = "";
-		int argc = 0, i = 0;
-		while(argv[i++] != 0) argc++;
-
-		i = readlink("/proc/self/exe", target, sizeof(target));
-		if(i < 0 || i == sizeof(target)) {
-			errno = ENOMEM;
-			return -1;
-		}
-
-		new_argv = calloc(argc + 7, sizeof(char *));
-		new_argv[0] = LOADER;
-		new_argv[1] = "--argv0";
-		new_argv[2] = argv[0];
-		new_argv[3] = "--preload";
-		new_argv[4] = "/lib/libgcompat.so.0";
-		new_argv[5] = "--";
-		new_argv[6] = target;
-		for(int j = 1, i = 7; j < argc; ++i, ++j) {
-			new_argv[i] = argv[j];
-		}
-		return execve(LINKER, new_argv, envp);
-	}
-	return real_execve(pathname, argv, envp);
-}
-
-extern char **environ;
-int execv(const char *pathname, char *const argv[]) {
-	return execve(pathname, argv, environ);
-}
-
-static int (*real_execvp)(const char *file, char *const argv[]);
-int execvp(const char *file, char *const argv[]) {
-	if(!strcmp(file, "/proc/self/exe")) {
-		return execv(file, argv);
-	}
-	if(real_execvp == NULL) {
-		real_execvp = dlsym(RTLD_NEXT, "execvp");
-		if(real_execvp == NULL) {
-			errno = ENOSYS;
-			return -1;
-		}
-	}
-	return real_execvp(file, argv);
-}
-
 int __close(int fd)
 {
 	return close(fd);
+}
+
+int renameat2(int oldfd, const char *old, int newfd, const char *new, unsigned int flags)
+{
+	return syscall(SYS_renameat2, oldfd, old, newfd, new, flags);
 }

@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <dlfcn.h>  /* dladdr */
 #include <stddef.h> /* NULL */
 #include <stdint.h> /* uintptr_t */

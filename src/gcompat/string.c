@@ -224,6 +224,7 @@ char *__strdup(const char *string)
 /**
  * Non-POSIX strerror_r.
  */
+/*
 static int (*real_strerror_r)(int, char *, size_t);
 
 char *strerror_r(int errnum, char *buf, size_t buflen)
@@ -235,6 +236,7 @@ char *strerror_r(int errnum, char *buf, size_t buflen)
 	real_strerror_r(errnum, buf, buflen);
 	return buf;
 }
+*/
 
 /**
  * Concatenate a string with part of another, with buffer overflow checking.

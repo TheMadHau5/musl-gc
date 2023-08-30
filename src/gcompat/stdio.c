@@ -1,3 +1,4 @@
+#include "alias.h"
 #define _GNU_SOURCE /* fgets_unlocked */
 #include <assert.h> /* assert */
 #include <dlfcn.h>  /* dlsym, RTLD_NEXT */
@@ -81,33 +82,6 @@ char *__fgets_unlocked_chk(char *s, size_t slen, int n, FILE *stream)
 }
 
 /**
- * Open a stream.
- */
-
-ssize_t readlink(const char *path, char *buf, size_t len);
-static FILE *(*real_fopen)(const char *, const char *);
-
-FILE *fopen(const char *restrict pathname, const char *restrict mode)
-{
-	if (real_fopen == NULL) {
-		real_fopen = dlsym(RTLD_NEXT, "fopen");
-		if (real_fopen == NULL) {
-			errno = ENOSYS;
-			return NULL;
-		}
-	}
-
-	if (!strcmp(pathname, "/proc/self/exe")) {
-		char real_self[PATH_MAX];
-		if (readlink("/proc/self/exe", real_self, PATH_MAX) == -1) {
-			return NULL;
-		}
-		return real_fopen(real_self, mode);
-	}
-	return real_fopen(pathname, mode);
-}
-
-/**
  * Convert formatted output, with stack checking.
  *
  * LSB 5.0: LSB-Core-generic/baselib---fprintf-chk-1.html
@@ -137,6 +111,8 @@ size_t __fread_chk(void *buf, size_t buflen, size_t size, size_t nitems,
 
 	return fread(buf, size, nitems, stream);
 }
+
+weak_alias(__fread_chk, __fread_unlocked_chk);
 
 /**
  * Format and print data, with stack checking.

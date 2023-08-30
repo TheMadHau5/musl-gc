@@ -44,24 +44,6 @@ struct mallinfo {
 	int keepcost; /* Top-most, releasable space (bytes) */
 };
 
-void *__libc_calloc(size_t nmemb, size_t size)
-{
-	return calloc(nmemb, size);
-}
-alias(__libc_calloc, __calloc);
-
-void __libc_free(void *ptr)
-{
-	free(ptr);
-}
-alias(__libc_free, __free);
-
-void *__libc_malloc(size_t size)
-{
-	return malloc(size);
-}
-alias(__libc_malloc, __malloc);
-
 void *__libc_memalign(size_t align, size_t len)
 {
 	void *result = NULL;
@@ -70,12 +52,6 @@ void *__libc_memalign(size_t align, size_t len)
 	return result;
 }
 alias(__libc_memalign, __memalign);
-
-void *__libc_realloc(void *ptr, size_t size)
-{
-	return realloc(ptr, size);
-}
-alias(__libc_realloc, __realloc);
 
 void *__sbrk(intptr_t increment)
 {
