@@ -1,7 +1,7 @@
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <sys/syscall.h> /* syscall */
+#include "syscall.h" /* syscall */
 
 struct open_how {
 	uint64_t flags;

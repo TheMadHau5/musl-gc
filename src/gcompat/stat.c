@@ -1,7 +1,7 @@
 #define _GNU_SOURCE
 #include <stdint.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
+#include "syscall.h"
 
 struct statx {
 	uint32_t stx_mask;

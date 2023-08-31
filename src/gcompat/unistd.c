@@ -2,12 +2,13 @@
 #include <fcntl.h>  /* O_CREAT */
 #include <limits.h> /* NGROUPS_MAX */
 #include <stddef.h> /* NULL, size_t */
+#define _BSD_SOURCE
 #include <unistd.h> /* confstr, getcwd, getgroups, ... */
 #include <errno.h>  /* ENOSYS, ENOMEM */
 #include <stdlib.h> /* calloc */
 #include <dlfcn.h>  /* dlsym */
 #include <string.h> /* strcmp */
-#include <sys/syscall.h> /* syscall */
+#include "syscall.h" /* syscall */
 
 #include "alias.h" /* alias */
 

@@ -1,5 +1,5 @@
 #include <sys/auxv.h>		/* getauxval */
-#include <sys/syscall.h>
+#include "syscall.h"
 #include <unistd.h>		/* size_t */
 
 

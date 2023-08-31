@@ -27,6 +27,7 @@
 #include <malloc.h> /* memalign */
 #include <stdlib.h> /* {m,c,re}alloc, free */
 #include <string.h> /* memset */
+#define _BSD_SOURCE
 #include <unistd.h> /* sbrk */
 
 #include "alias.h" /* alias */

@@ -1,6 +1,7 @@
 #include <assert.h> /* assert */
 #include <stdarg.h> /* va_list, va_start, va_end */
 #include <stddef.h> /* NULL */
+#define _BSD_SOURCE
 #include <syslog.h> /* vsyslog */
 
 void __vsyslog_chk(int priority, int flag, const char *format, va_list ap);
